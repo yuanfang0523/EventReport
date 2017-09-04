@@ -2,6 +2,7 @@ package com.laioffer.eventreporter;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
@@ -17,7 +18,7 @@ import android.widget.ListView;
  * A simple {@link Fragment} subclass.
  */
 public class EventFragment extends Fragment {
-    //private ListView mListView;
+    private ListView listView;
 
     public EventFragment() {
         // Required empty public constructor
@@ -46,7 +47,7 @@ public class EventFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_event, container, false);
-        ListView listView = (ListView) view.findViewById(R.id.event_list);
+        listView = (ListView) view.findViewById(R.id.event_list);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 getActivity(),
                 android.R.layout.simple_list_item_1,
@@ -73,15 +74,16 @@ public class EventFragment extends Fragment {
                 "Event10", "Event11", "Event12"};
         return names;
     }
-    /*
-    // Change background color if the item is selected
+
     public void onItemSelected(int position){
-        for (int i = 0; i < mGridView.getChildCount(); i++){
+        for (int i = 0; i < listView.getChildCount(); i++){
             if (position == i) {
-                mListView.getChildAt(i).setBackgroundColor(Color.BLUE);
+                listView.getChildAt(i).setBackgroundColor(Color.BLUE);
             } else {
-                mListView.getChildAt(i).setBackgroundColor(Color.parseColor("#EEEEEE"));
+                listView.getChildAt(i).setBackgroundColor(Color.parseColor("#EEEEEE"));
             }
         }
-        */
+    }
+
+
 }
