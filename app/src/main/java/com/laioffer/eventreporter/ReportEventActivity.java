@@ -42,6 +42,7 @@ public class ReportEventActivity extends AppCompatActivity {
     private DatabaseReference database;
     private LocationTracker mLocationTracker;
     private Activity mActivity;
+    private ImageView mImageViewLocation;
 
     private static int RESULT_LOAD_IMAGE = 1;
     private ImageView img_event_picture;
@@ -65,6 +66,8 @@ public class ReportEventActivity extends AppCompatActivity {
         mEditTextContent = (EditText) findViewById(R.id.edit_text_event_content);
         mImageViewCamera = (ImageView) findViewById(R.id.img_event_camera);
         mImageViewSend = (ImageView) findViewById(R.id.img_event_report);
+        mImageViewLocation = (ImageView) findViewById(R.id.img_event_location);
+
         database = FirebaseDatabase.getInstance().getReference();
 
         img_event_picture = (ImageView) findViewById(R.id.img_event_picture_capture);
@@ -92,7 +95,31 @@ public class ReportEventActivity extends AppCompatActivity {
         final double latitude = mLocationTracker.getLatitude();
         final double longitude = mLocationTracker.getLongitude();
 
-        new AsyncTask<Void, Void, Void>() {
+        mImageViewLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AsyncTask<Void, Void, Void>() {
+                    private List<String> mAddressList = new ArrayList<String>();
+
+                    @Override
+                    protected Void doInBackground(Void... urls) {
+                        mAddressList = mLocationTracker.getCurrentLocationViaJSON(latitude,longitude);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void input) {
+                        if (mAddressList.size() >= 3) {
+                            mEditTextLocation.setText(mAddressList.get(0) + ", " + mAddressList.get(1) +
+                                    ", " + mAddressList.get(2) + ", " + mAddressList.get(3));
+                        }
+
+                    }
+                }.execute();
+            }
+        });
+
+      /*  new AsyncTask<Void, Void, Void>() {
             private List<String> mAddressList = new ArrayList<String>();
 
             @Override
@@ -109,7 +136,7 @@ public class ReportEventActivity extends AppCompatActivity {
                 }
 
             }
-        }.execute();
+        }.execute();*/
 
         //auth
         mAuth = FirebaseAuth.getInstance();
@@ -181,6 +208,9 @@ public class ReportEventActivity extends AppCompatActivity {
                     mEditTextTitle.setText("");
                     mEditTextLocation.setText("");
                     mEditTextContent.setText("");
+                    // add the following two lines so the picture will disappear after report
+                    img_event_picture.setImageResource(0);
+                    img_event_picture.setVisibility(View.INVISIBLE);
                 }
             }
         });
