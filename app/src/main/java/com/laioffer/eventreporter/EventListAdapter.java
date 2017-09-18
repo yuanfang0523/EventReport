@@ -1,6 +1,7 @@
 package com.laioffer.eventreporter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
@@ -186,7 +187,8 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         holder.location.setText(locations[1] + "," + locations[2]);
         holder.description.setText(event.getDescription());
         holder.time.setText(Utils.timeTransformer(event.getTime()));
-
+        // event.getCommentNumber() 是一个long type  需要 String.valueOf 来转换
+        holder.comment_number.setText(String.valueOf(event.getCommentNumber()));
         holder.good_number.setText(String.valueOf(event.getLike()));
 
 
@@ -232,6 +234,17 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 });
             }
         });
+
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, CommentActivity.class);
+                String eventId = event.getId();
+                intent.putExtra("EventID", eventId);
+                context.startActivity(intent);
+            }
+        });
+
 
     }
 
